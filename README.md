@@ -7,3 +7,4 @@ Code intended to implement a goodness-of-fit test for regression on Principal Co
 - fregre.lr.pc.ex: example of regression on PCs for the FLM with functional response.
 - fregre.lr.pc: regression on PCs for the FLM with functional response.
 - fregre.sr.pc: regression on PCs for the FLM with scalar response.
+- pseudoinverse: computes a pseudo-inverse by means of a singular value decompsoition (SVD).
