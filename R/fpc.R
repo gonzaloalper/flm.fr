@@ -1,4 +1,4 @@
-flm.pc = function (fdataobj, ncomp = 3) 
+fpc = function (fdataobj, ncomp = 3) 
 {
   # Computes the principal components
   C <- match.call()
