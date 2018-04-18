@@ -3,6 +3,13 @@
 
 library(viridis)
 
+# Execute all the functions in the R directory from the above file:
+sourceDir <- function(directory = "R", ...) {
+  invisible(sapply(dir(directory),
+                   function(x) source(paste0(directory, "/", x), ...)))
+}
+sourceDir()
+
 # Argvals
 l <- 201
 ss <- seq(0, 1, l = l) # Argvals of X
@@ -37,9 +44,9 @@ plot(Y)
 pcX <- fdata2pc(fdataobj)
 pcY <- fdata2pc(Y)
 
-hat_beta <- t(pcX$x[,1:201])%*%pcX$x[,1:201]
+hat_beta <- t(pcX$x[,1:3])%*%pcX$x[,1:3]
 hat_beta <- Minverse(hat_beta)
-hat_beta <- hat_beta%*%t(pcX$x[,1:201])
-hat_beta <- hat_beta%*%pcY$x[,1:201]
+hat_beta <- hat_beta%*%t(pcX$x[,1:3])
+hat_beta <- hat_beta%*%pcY$x[,1:3]
 
 print(hat_beta)
