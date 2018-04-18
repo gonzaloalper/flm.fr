@@ -50,9 +50,8 @@ fpc = function (fdataobj, ncomp = 3)
   colnames(scores) <- paste("PC", 1:J, sep = "")
   l <- 1:ncomp
 
-  out <- list(call = C, d = newd, rotation = vs[1:ncomp], x = scores, 
-              fdataobj.cen = X_cen.fdata, norm = norm, type = "pc", mean = x_mean, 
-              fdataobj = fdataobj, l = l, u = u[, 1:ncomp, drop = FALSE])
+  out <- list(rotation = vs[l], x = scores, fdataobj.cen = X_cen.fdata,
+              mean = x_mean, l = l, u = u[, l, drop = FALSE])
   class(out) = "fdata.comp"
   return(out)
 }
