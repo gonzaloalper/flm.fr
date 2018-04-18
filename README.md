@@ -7,7 +7,7 @@ Code intended to implement a goodness-of-fit test for regression on Principal Co
 
 The R directory contains exclusively .R functions, such as:
 
-- flm.pc: PCA for functional data.
+- fpc: PCA for functional data.
 - fregre.fr.pc: regression on PCs for the FLM with functional response.
 - fregre.sr.pc: regression on PCs for the FLM with scalar response.
 - pseudoinverse: computes a pseudo-inverse by means of a singular value decompsoition (SVD).
