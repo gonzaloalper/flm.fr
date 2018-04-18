@@ -5,7 +5,7 @@ Code intended to implement a goodness-of-fit test for regression on Principal Co
 - data-flm-fr: examples of functional data with functional response.
 - fregre.lr.pc.ex: example of regression on PCs for the FLM with functional response.
 
-The \texttt{R} directory contains exclusively \texttt{R} functions, such as:
+The R directory contains exclusively .R functions, such as:
 
 - flm.pc: PCA for functional data.
 - fregre.fr.pc: regression on PCs for the FLM with functional response.
