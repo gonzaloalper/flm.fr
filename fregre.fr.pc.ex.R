@@ -17,7 +17,7 @@ tt <- ss # Argvals of Y
 
 # Theoretical beta
 beta <- function(s, t) {
-  5 / (1 + (s - 0.5)^2) * cos(2 * pi * t * s)
+  5 / (1 + (s - 0.5)^2) * cos(2 * pi * t * s) / 200
   #(s + t^2) / 100
 }
 
@@ -45,7 +45,7 @@ pcX <- fdata2pc(fdataobj)
 pcY <- fdata2pc(Y)
 
 hat_beta <- t(pcX$x[,1:3])%*%pcX$x[,1:3]
-hat_beta <- Minverse(hat_beta)
+hat_beta <- fda.usc:::Minverse(hat_beta)
 hat_beta <- hat_beta%*%t(pcX$x[,1:3])
 hat_beta <- hat_beta%*%pcY$x[,1:3]
 
