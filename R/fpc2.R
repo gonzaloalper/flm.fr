@@ -20,11 +20,8 @@ fpc2 = function (fdataobj, ncomp = 3)
   # u <- eigenres$u # No necesario?
   d <- eigenres$d
   
-  # Eigendecomposition of the covariance matrix way
-  eig <- eigen(crossprod(X_cen))
-  
   # Scores al estilo de componentes principales
-  scores1 <- X %*% v[, l]
+  scores1 <- X_cen %*% v[, l]
   
   out <- list(rotation = v[, l], x = scores1, mean = x_mean, l = l)
   class(out) = "fdata.comp"
