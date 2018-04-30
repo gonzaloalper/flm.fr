@@ -62,9 +62,8 @@ for (i in 1:npcX){
   }
 }
 
-image(surface_beta,col = viridis(20))
+image(surface_beta_hat,col = viridis(20))
 image(ss, tt, surface_beta<-outer(ss, tt, FUN = beta), col = viridis(20))
-max(surface_beta_hat-surface_beta)
 
 theoretical_beta <- matrix(0, nrow = npcX, ncol = npcY)
 acc_aux<-outer(ss, tt, FUN = beta)
