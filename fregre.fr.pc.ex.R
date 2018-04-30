@@ -44,8 +44,8 @@ plot(Y)
 
 npcX<-5
 npcY<-3
-pcX <- fpc(fdataobj,npcX)
-pcY <- fpc(Y,npcY)
+pcX <- fpc2(fdataobj,npcX)
+pcY <- fpc2(Y,npcY)
 
 hat_beta <- t(pcX$x[,1:npcX])%*%pcX$x[,1:npcX]
 hat_beta <- pseudoinverse(hat_beta)
@@ -57,7 +57,7 @@ print(hat_beta)
 surface_beta_hat <- 0
 for (i in 1:npcX){
   for (j in 1:npcY){
-    acc<-hat_beta[i,j]*outer(pcX$rotation$data[i,],pcY$rotation$data[j,])
+    acc<-hat_beta[i,j]*outer(pcX$rotation[i,],pcY$rotation[j,])
     surface_beta_hat<-surface_beta_hat+acc
   }
 }
@@ -70,7 +70,9 @@ theoretical_beta <- matrix(0, nrow = npcX, ncol = npcY)
 acc_aux<-outer(ss, tt, FUN = beta)
 for (i in 1:npcX){
   for (j in 1:npcY){
-    acc<-acc_aux*outer(pcX$rotation$data[i,],pcY$rotation$data[j,])
+    acc<-acc_aux*outer(pcX$rotation[,i],pcY$rotation[,j])
     theoretical_beta[i,j]<-sdetorus::integrateSimp2D(acc,c(1,1))
   }
 }
+
+abs(theoretical_beta-hat_beta)/theoretical_beta
