@@ -13,8 +13,8 @@ sourceDir()
 # Argvals
 lx <- 201
 ly <- 101
-ss <- seq(0, 2, l = lx) # Argvals of X
-tt <- seq(0, 1, l = ly) # Argvals of Y
+ss <- seq(0, 1, l = lx) # Argvals of X
+tt <- seq(0, 2, l = ly) # Argvals of Y
 
 # Theoretical beta
 beta <- function(s, t) {
@@ -62,7 +62,7 @@ for (i in 1:npcX){
   }
 }
 
-image(surface_beta_hat,col = viridis(20))
+image(fdataobj$argvals, Y$argvals, surface_beta_hat,col = viridis(20))
 image(ss, tt, surface_beta<-outer(ss, tt, FUN = beta), col = viridis(20))
 
 theoretical_beta <- matrix(0, nrow = npcX, ncol = npcY)
