@@ -9,7 +9,6 @@ fpc2 = function (fdataobj, ncomp = 3)
   # Center data. fda.usc's is slower
   x_mean <- colMeans(fdataobj$data)
   X_cen <- t(t(fdataobj$data) - x_mean)
-  mm <- fdata.cen(fdataobj)
   
   # Componentes
   l <- 1:ncomp
