@@ -11,9 +11,9 @@ sourceDir <- function(directory = "R", ...) {
 sourceDir()
 
 # Argvals
-lx <- 11
+lx <- 201
 ly <- 101
-ss <- seq(0, 1, l = lx) # Argvals of X
+ss <- seq(0, 2, l = lx) # Argvals of X
 tt <- seq(0, 1, l = ly) # Argvals of Y
 
 # Theoretical beta
@@ -27,7 +27,7 @@ image(ss, tt, outer(ss, tt, FUN = beta), col = viridis(20))
 
 # Sample covariate
 library(fda.usc)
-n <- 20
+n <- 200
 fdataobj <- r.ou(n = n, x0 = seq(-5, 5, l = n), alpha = 2, t = ss)
 
 # Error
@@ -43,9 +43,9 @@ plot(fdataobj)
 plot(Y)
 
 npcX<-5
-npcY<-3
+npcY<-5
 pcX <- fpc2(fdataobj,npcX)
-pcY <- fpc2(Y,npcY)
+pcY <- fpc3(Y,npcY)
 
 hat_beta <- t(pcX$x[,1:npcX])%*%pcX$x[,1:npcX]
 hat_beta <- pseudoinverse(hat_beta)
@@ -57,7 +57,7 @@ print(hat_beta)
 surface_beta_hat <- 0
 for (i in 1:npcX){
   for (j in 1:npcY){
-    acc<-hat_beta[i,j]*outer(pcX$rotation[i,],pcY$rotation[j,])
+    acc<-hat_beta[i,j]*outer(pcX$rotation[,i],pcY$rotation[,j])
     surface_beta_hat<-surface_beta_hat+acc
   }
 }
@@ -70,8 +70,12 @@ acc_aux<-outer(ss, tt, FUN = beta)
 for (i in 1:npcX){
   for (j in 1:npcY){
     acc<-acc_aux*outer(pcX$rotation[,i],pcY$rotation[,j])
-    theoretical_beta[i,j]<-sdetorus::integrateSimp2D(acc,c(1,1))
+    theoretical_beta[i,j]<-sum(acc)
+    #theoretical_beta[i,j]<-sdetorus::integrateSimp2D(acc,c(1,1))
   }
 }
 
 abs(theoretical_beta-hat_beta)/theoretical_beta
+
+theoretical_beta
+hat_beta
