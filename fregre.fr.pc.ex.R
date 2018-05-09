@@ -3,6 +3,7 @@
 
 library(viridis)
 
+setwd("C:/Users/gonza/Desktop")
 # Execute all the functions in the R directory from the above file:
 sourceDir <- function(directory = "R", ...) {
   invisible(sapply(dir(directory),
@@ -19,8 +20,8 @@ tt <- seq(-1, 9, l = ly) # Argvals of Y
 # Theoretical beta
 beta <- function(s, t) {
   #5 / (1 + (s - 0.5)^2) * cos(2 * pi * t * s) / 200
-  (s + t^2) / 100
-  #cos(t * s / pi)
+  #(s + t^2) / 100
+  cos(t * s / pi)
 }
 
 # Visualization
@@ -43,7 +44,7 @@ par(mfrow = c(1, 2))
 plot(fdataobj)
 plot(Y)
 
-npcX<-100
+npcX<-20
 npcY<-100
 pcX <- fpc2(fdataobj,npcX,equispaced==TRUE)
 pcY <- fpc2(Y,npcY,equispaced==TRUE)
@@ -93,4 +94,4 @@ theoretical_beta
 limites = c(max(surface_beta_hat), min(surface_beta_hat), 
             max(surface_beta), min(surface_beta)); limites
 
-sum(((hat_beta-theoretical_beta)/theoretical_beta)^2)
+diferencia <- (sum(((hat_beta-theoretical_beta)/theoretical_beta)^2))^(1/(npcX*npcY)); diferencia
