@@ -71,7 +71,7 @@ for (i in 1:npcX){
 # surface_beta <- outer(ss, tt, FUN = beta)
 limites = c(min(surface_beta_hat), max(surface_beta_hat))
 image(ss, tt, surface_beta_hat,col = viridis(20))
-image(ss, tt, surface_beta, col = viridis(20))
+image(ss, tt, surface_beta, col = viridis(20), zlim = limites)
 
 #persp(fdataobj$argvals, Y$argvals, surface_beta_hat, phi = 0, theta = 60)
 #persp(ss, tt, surface_beta, phi = 0, theta = 60)
