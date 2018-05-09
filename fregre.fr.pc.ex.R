@@ -19,8 +19,8 @@ tt <- seq(-1, 9, l = ly) # Argvals of Y
 # Theoretical beta
 beta <- function(s, t) {
   #5 / (1 + (s - 0.5)^2) * cos(2 * pi * t * s) / 200
-  #(s + t^2) / 100
-  cos(t * s / pi)
+  (s + t^2) / 100
+  #cos(t * s / pi)
 }
 
 # Visualization
@@ -29,7 +29,7 @@ surface_beta <- outer(ss, tt, FUN = beta)
 # Sample covariate
 library(fda.usc)
 n <- 2000
-fdataobj <- r.ou(n = n, x0 = seq(-5, 5, l = n), alpha = 2, t = ss)
+fdataobj <- r.ou(n = n, x0 = seq(-10, 10, l = n), alpha = 2, t = ss)
 
 # Error
 noise <- matrix(rnorm(n = n * ly, mean = 0, sd = 0.1), nrow = n, ncol = ly)
@@ -43,8 +43,8 @@ par(mfrow = c(1, 2))
 plot(fdataobj)
 plot(Y)
 
-npcX<-5
-npcY<-5
+npcX<-100
+npcY<-100
 pcX <- fpc2(fdataobj,npcX,equispaced==TRUE)
 pcY <- fpc2(Y,npcY,equispaced==TRUE)
 
@@ -73,7 +73,7 @@ limites = c(min(surface_beta_hat), max(surface_beta_hat))
 image(ss, tt, surface_beta_hat,col = viridis(20))
 image(ss, tt, surface_beta, col = viridis(20))
 
-#persp(ss, tt, surface_beta_hat, phi = 0, theta = 60)
+#persp(fdataobj$argvals, Y$argvals, surface_beta_hat, phi = 0, theta = 60)
 #persp(ss, tt, surface_beta, phi = 0, theta = 60)
 
 #====================================================================
