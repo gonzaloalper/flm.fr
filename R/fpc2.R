@@ -35,7 +35,7 @@ fpc2 = function (fdataobj, ncomp = 3, equispaced)
     #scores1 <- h * X_cen %*% v[, l]
   #}
   
-  out <- list(rotation = v[, l], x = scores1, mean = x_mean, l = l, h = h)
+  out <- list(d = d, rotation = v[, l], x = scores1, mean = x_mean, l = l, h = h)
   class(out) = "fdata.comp"
   return(out)
 }
