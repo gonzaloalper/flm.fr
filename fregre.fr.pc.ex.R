@@ -15,13 +15,13 @@ sourceDir()
 lx <- 101
 ly <- 201
 ss <- seq(0, 50, l = lx) # Argvals of X
-tt <- seq(-1, 9, l = ly) # Argvals of Y
+tt <- seq(1, 2, l = ly) # Argvals of Y
 
 # Theoretical beta
 beta <- function(s, t) {
   #5 / (1 + (s - 0.5)^2) * cos(2 * pi * t * s) / 200
   #(s + t^2) / 100
-  cos(t * s / pi)
+  sin(t * s / pi)^2
 }
 
 # Visualization
@@ -45,7 +45,7 @@ plot(fdataobj)
 plot(Y)
 
 npcX<-20
-npcY<-100
+npcY<-20
 pcX <- fpc2(fdataobj,npcX,equispaced==TRUE)
 pcY <- fpc2(Y,npcY,equispaced==TRUE)
 
@@ -66,10 +66,10 @@ for (i in 1:npcX){
     #acc<-hat_beta[i,j]*outer(pcX$rotation[,i], pcY$rotation[,j])*sqrt(pcX$h/pcY$h)
     acc <- hat_beta[i,j]*pcX$rotation[,i]%*%t(pcY$rotation[,j])*sqrt(pcX$h/pcY$h)
     surface_beta_hat <- surface_beta_hat+acc
+    # surface_beta <- outer(ss, tt, FUN = beta)
   }
 }
 
-# surface_beta <- outer(ss, tt, FUN = beta)
 limites = c(min(surface_beta_hat), max(surface_beta_hat))
 image(ss, tt, surface_beta_hat,col = viridis(20))
 image(ss, tt, surface_beta, col = viridis(20), zlim = limites)
@@ -95,3 +95,6 @@ limites = c(max(surface_beta_hat), min(surface_beta_hat),
             max(surface_beta), min(surface_beta)); limites
 
 diferencia <- (sum(((hat_beta-theoretical_beta)/theoretical_beta)^2))^(1/(npcX*npcY)); diferencia
+
+explained_variance_X <- sum(pcX$d[1:npcX])/sum(pcX$d); explained_variance_X
+explained_variance_Y <- sum(pcY$d[1:npcY])/sum(pcY$d); explained_variance_Y
