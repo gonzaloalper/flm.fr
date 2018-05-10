@@ -46,8 +46,8 @@ plot(Y)
 
 npcX<-20
 npcY<-20
-pcX <- fpc2(fdataobj,npcX,equispaced==TRUE)
-pcY <- fpc2(Y,npcY,equispaced==TRUE)
+pcX <- fpc2(fdataobj,npcX,equispaced=TRUE)
+pcY <- fpc2(Y,npcY,equispaced=TRUE)
 
 hat_beta <- t(pcX$x[,1:npcX])%*%pcX$x[,1:npcX]
 hat_beta <- pseudoinverse(hat_beta)
