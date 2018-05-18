@@ -1,4 +1,3 @@
-
 ## FLM WITH FUNCTIONAL RESPONSE EXAMPLE
 
 library(viridis)
@@ -12,8 +11,8 @@ sourceDir <- function(directory = "R", ...) {
 sourceDir()
 
 # Argvals
-lx <- 101
-ly <- 201
+lx <- 201
+ly <- 101
 ss <- seq(0, 50, l = lx) # Argvals of X
 tt <- seq(1, 2, l = ly) # Argvals of Y
 
@@ -21,7 +20,7 @@ tt <- seq(1, 2, l = ly) # Argvals of Y
 beta <- function(s, t) {
   #5 / (1 + (s - 0.5)^2) * cos(2 * pi * t * s) / 200
   #(s + t^2) / 100
-  sin(t * s / pi)^2
+  cos(t * s / pi)^2
 }
 
 # Visualization
@@ -29,32 +28,32 @@ surface_beta <- outer(ss, tt, FUN = beta)
 
 # Sample covariate
 library(fda.usc)
-n <- 2000
-fdataobj <- r.ou(n = n, x0 = seq(-10, 10, l = n), alpha = 2, t = ss)
+n <- 200
+X <- r.ou(n = n, x0 = seq(-10, 10, l = n), alpha = 2, t = ss)
 
 # Error
 noise <- matrix(rnorm(n = n * ly, mean = 0, sd = 0.1), nrow = n, ncol = ly)
 
 # Response: Y(t) = \int X(s) beta(s, t) ds + eps(t)
 Y <- fdata(mdata = noise, argvals = tt)
-Y$data <- fdataobj$data %*% surface_beta + noise
+Y$data <- X$data %*% surface_beta + noise
 
 # Plots
 par(mfrow = c(1, 2))
-plot(fdataobj)
+plot(X)
 plot(Y)
 
-npcX<-20
-npcY<-20
-pcX <- fpc2(fdataobj,npcX,equispaced=TRUE)
-pcY <- fpc2(Y,npcY,equispaced=TRUE)
+npcX<-200
+npcY<-100
+pcX <- fpc2(X,npcX,equispaced = TRUE)
+pcY <- fpc2(Y,npcY,equispaced = TRUE)
 
-hat_beta <- t(pcX$x[,1:npcX])%*%pcX$x[,1:npcX]
-hat_beta <- pseudoinverse(hat_beta)
-hat_beta <- hat_beta%*%t(pcX$x[,1:npcX])
-hat_beta <- hat_beta%*%pcY$x[,1:npcY]*sqrt(pcX$h)*sqrt(pcY$h)
+hat_b <- t(pcX$x[,1:npcX])%*%pcX$x[,1:npcX]
+hat_b <- pseudoinverse(hat_b)
+hat_b <- hat_b%*%t(pcX$x[,1:npcX])
+hat_b <- hat_b%*%pcY$x[,1:npcY]*sqrt(pcX$h)*sqrt(pcY$h)
 
-print(hat_beta)
+print(hat_b)
 
 #====================================================================
 
@@ -64,7 +63,7 @@ surface_beta_hat <- matrix(0, nrow = lx, ncol = ly)
 for (i in 1:npcX){
   for (j in 1:npcY){
     #acc<-hat_beta[i,j]*outer(pcX$rotation[,i], pcY$rotation[,j])*sqrt(pcX$h/pcY$h)
-    acc <- hat_beta[i,j]*pcX$rotation[,i]%*%t(pcY$rotation[,j])*sqrt(pcX$h/pcY$h)
+    acc <- hat_b[i,j]*pcX$rotation[,i]%*%t(pcY$rotation[,j])*sqrt(pcX$h/pcY$h)
     surface_beta_hat <- surface_beta_hat+acc
     # surface_beta <- outer(ss, tt, FUN = beta)
   }
@@ -89,12 +88,13 @@ for (i in 1:npcX){
   }
 }
 
-hat_beta
-theoretical_beta
-limites = c(max(surface_beta_hat), min(surface_beta_hat), 
-            max(surface_beta), min(surface_beta)); limites
-
-diferencia <- (sum(((hat_beta-theoretical_beta)/theoretical_beta)^2))^(1/(npcX*npcY)); diferencia
+diferencia <- (sum(((hat_b - theoretical_beta)/theoretical_beta)^2))^(1/(npcX*npcY)); 
+diferencia
 
 explained_variance_X <- sum(pcX$d[1:npcX])/sum(pcX$d); explained_variance_X
 explained_variance_Y <- sum(pcY$d[1:npcY])/sum(pcY$d); explained_variance_Y
+
+hat_y <- pcX$x%*%hat_b
+residuals <- abs(hat_y - pcY$x)
+
+PCvM_statistic(residuals)
