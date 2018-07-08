@@ -2,7 +2,7 @@
 
 library(viridis)
 
-setwd("C:/Users/gonza/Desktop")
+# setwd("C:/Users/gonza/Desktop")
 # Execute all the functions in the R directory from the above file:
 sourceDir <- function(directory = "R", ...) {
   invisible(sapply(dir(directory),

@@ -13,7 +13,8 @@ fpc2 = function (fdataobj, ncomp = 3, equispaced)
   l <- 1:ncomp
   
   # SVD way
-  eigenres <- svd(X_cen)
+  h <- (rtt[2] - rtt[1])/(length(tt) - 1)
+  eigenres <- svd(h * X_cen)
   v <- eigenres$v
   d <- eigenres$d
   #if(missing(equispaced)){
@@ -23,9 +24,10 @@ fpc2 = function (fdataobj, ncomp = 3, equispaced)
   #} 
   
   #else if(equispaced == TRUE){
-    h <- (rtt[2] - rtt[1])/(length(tt) - 1)
+    # h <- (rtt[2] - rtt[1])/(length(tt) - 1)
     v <- v/sqrt(h) # functional normalization
     # Scores al estilo de componentes principales
+    # h <- (rtt[2] - rtt[1])/(length(tt) - 1)
     scores1 <- h * X_cen %*% v[, l]
   #}
   
