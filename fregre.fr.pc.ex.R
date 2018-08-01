@@ -103,6 +103,9 @@ fregre.pc.ex <- function(B)
   summary(as.vector(fresiduals$data))
   summary(as.vector(res_star$data))
   
+  # Proportion of the residuals that are larger than the bootstraped
+  100*sum(fresiduals$data>res_star$data)/dim(fresiduals$data)[1]/dim(fresiduals$data)[2]
+  
   par(mfrow = c(1, 3))
   minima <- c(min(surface_beta), min(surface_pca), min(surface_beta_hat))
   maxima <- c(max(surface_beta), max(surface_pca), max(surface_beta_hat))
