@@ -18,7 +18,7 @@ linear_model <- function(X, argvals_y, std_dev, beta)
   for (j in 1:ly) {
     b <- surface_beta[, j]
     Y$data[, j] <- sapply(1:n, function(i) {
-      sdetorus::integrateSimp1D(b * X$data[i, ], length_x)
+      integrateSimp1D(b * X$data[i, ], length_x)
     })
   }
   
