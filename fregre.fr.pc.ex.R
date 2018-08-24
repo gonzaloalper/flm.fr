@@ -142,7 +142,7 @@ fregre.pc.ex <- function(B)
     Y_star_PC <- fpc(Y_star,npcY,equispaced = TRUE)
     pcY_star <- Y_star_PC$x %*% t(Y_star_PC$rotation)
     res_hat_star$data <- P %*% pcY_star
-    PCvM_star[i] = PCvM_statistic(pcX$x, res_hat_star, Ad)
+    PCvM_star[i] = PCvM_statistic(pcX$x, res_hat_star$data, Ad)
   }
   
   par(mfrow = c(1, 1))
