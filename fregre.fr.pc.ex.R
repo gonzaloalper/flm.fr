@@ -130,8 +130,7 @@ fregre.pc.ex <- function(B)
 
   PCvM <- PCvM_statistic(pcX$x, fresiduals$data %*% pcY$rotation, Ad)
   
-  Y_star <- Y
-  res_hat_star <- res_star
+  Y_star <- Y; y_hat_PC <- Y; res_hat_star <- fresiduals
   
   for (i in 1:B) {
     for (j in 1:dim(fresiduals$data)[1]){
@@ -139,7 +138,6 @@ fregre.pc.ex <- function(B)
     }
     Y_star <- Y - fresiduals + res_star
     Y_star_PC <- fpc(Y_star,npcY,equispaced = TRUE)
-    y_hat_PC <- Y
     y_hat_PC$data <- Y_star_PC$x %*% t(Y_star_PC$rotation)
     res_hat_star <- Y_star - y_hat_PC
     PCvM_star[i] = PCvM_statistic(pcX$x, res_hat_star$data %*% Y_star_PC$rotation, Ad)
@@ -155,8 +153,8 @@ fregre.pc.ex <- function(B)
   
   par(mfrow = c(2, 3))
   plot(Y)
-  plot(y_hat)
   plot(Y_star)
+  plot(y_hat_PC)
   plot(fresiduals)
   plot(res_star)
   plot(res_hat_star)
