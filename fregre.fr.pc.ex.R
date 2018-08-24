@@ -163,5 +163,5 @@ fregre.pc.ex <- function(B)
   plot(res_star)
   plot(res_hat_star)
   
-  return(PCvM)
+  return(pvalue)
 }
