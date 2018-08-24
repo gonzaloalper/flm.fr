@@ -128,7 +128,7 @@ fregre.pc.ex <- function(B)
   Ad=t(Ad)
   Ad=Ad+t(Ad)-diag(diag(Ad))
   
-  residuals <- P %*% Y$data %*% pcY$rotation
+  residuals <- P %*% pcY$x %*% t(pcY$rotation)
   PCvM <- PCvM_statistic(pcX$x, residuals, Ad)
   
   Y_star <- Y
@@ -139,8 +139,9 @@ fregre.pc.ex <- function(B)
       res_star$data[j,] <- fresiduals$data[j,] * rwild(1, "golden")
     }
     Y_star <- y_hat - fresiduals + res_star
-    pcY_star <- Y_star$data %*% pcY$rotation
-    res_hat_star <- P %*% pcY_star
+    Y_star_PC <- fpc(Y_star,npcY,equispaced = TRUE)
+    pcY_star <- Y_star_PC$x %*% t(Y_star_PC$rotation)
+    res_hat_star$data <- P %*% pcY_star
     PCvM_star[i] = PCvM_statistic(pcX$x, res_hat_star, Ad)
   }
   
@@ -148,7 +149,7 @@ fregre.pc.ex <- function(B)
   hist(PCvM_star)
   abline(v = PCvM, col = 2)
   summary(PCvM_star)
-  #print(PCvM)
+  print(PCvM)
   
   pvalue = sum(PCvM_star > PCvM)/B; print(pvalue)
   
@@ -158,6 +159,7 @@ fregre.pc.ex <- function(B)
   plot(Y_star)
   plot(fresiduals)
   plot(res_star)
+  plot(res_hat_star)
   
   return(pvalue)
 }
