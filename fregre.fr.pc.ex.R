@@ -93,10 +93,10 @@ fregre.pc.ex <- function(B)
   ## RESIDUALS AND BOOTSTRAP
   y_hat <- Y
   y_hat$data <- pcY$x %*% t(pcY$rotation)
-  fresiduals <- Y - y_hat$data
+  fresiduals <- Y - y_hat
   res_star <- fresiduals; for (j in 1:dim(fresiduals$data)[1]){ #PERTURBED RESIDUALS
     res_star$data[j,] <- fresiduals$data[j,] * rwild(1, "golden")}
-  Y_star <- y_hat - fresiduals + res_star
+  Y_star <- Y - fresiduals + res_star
   
   par(mfrow = c(1, 3))
   mm <- c(min(as.vector(fresiduals$data)), min(as.vector(res_star$data)))
@@ -127,9 +127,8 @@ fregre.pc.ex <- function(B)
   Ad[upper.tri(Ad,diag=FALSE)]=Adot.vec[-1]
   Ad=t(Ad)
   Ad=Ad+t(Ad)-diag(diag(Ad))
-  
-  residuals <- P %*% pcY$x %*% t(pcY$rotation)
-  PCvM <- PCvM_statistic(pcX$x, residuals, Ad)
+
+  PCvM <- PCvM_statistic(pcX$x, fresiduals$data %*% pcY$rotation, Ad)
   
   Y_star <- Y
   res_hat_star <- res_star
@@ -138,11 +137,12 @@ fregre.pc.ex <- function(B)
     for (j in 1:dim(fresiduals$data)[1]){
       res_star$data[j,] <- fresiduals$data[j,] * rwild(1, "golden")
     }
-    Y_star <- y_hat - fresiduals + res_star
+    Y_star <- Y - fresiduals + res_star
     Y_star_PC <- fpc(Y_star,npcY,equispaced = TRUE)
-    pcY_star <- Y_star_PC$x %*% t(Y_star_PC$rotation)
-    res_hat_star$data <- P %*% pcY_star
-    PCvM_star[i] = PCvM_statistic(pcX$x, res_hat_star$data, Ad)
+    y_hat_PC <- Y
+    y_hat_PC$data <- Y_star_PC$x %*% t(Y_star_PC$rotation)
+    res_hat_star <- Y_star - y_hat_PC
+    PCvM_star[i] = PCvM_statistic(pcX$x, res_hat_star$data %*% Y_star_PC$rotation, Ad)
   }
   
   par(mfrow = c(1, 1))
@@ -161,5 +161,5 @@ fregre.pc.ex <- function(B)
   plot(res_star)
   plot(res_hat_star)
   
-  return(pvalue)
+  return(PCvM)
 }
