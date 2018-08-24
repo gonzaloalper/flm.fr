@@ -92,8 +92,12 @@ fregre.pc.ex <- function(B)
   
   ## RESIDUALS AND BOOTSTRAP
   y_hat <- Y
-  y_hat$data <- pcY$x %*% t(pcY$rotation)
+  y_hat$data <- t(t(pcY$x %*% t(pcY$rotation)) + colMeans(Y$data))
   fresiduals <- Y - y_hat
+  par(mfrow = c(1, 3))
+  plot(Y)
+  plot(y_hat)
+  plot(fresiduals)
   res_star <- fresiduals; for (j in 1:dim(fresiduals$data)[1]){ #PERTURBED RESIDUALS
     res_star$data[j,] <- fresiduals$data[j,] * rwild(1, "golden")}
   Y_star <- Y - fresiduals + res_star
@@ -138,7 +142,7 @@ fregre.pc.ex <- function(B)
     }
     Y_star <- Y - fresiduals + res_star
     Y_star_PC <- fpc(Y_star,npcY,equispaced = TRUE)
-    y_hat_PC$data <- Y_star_PC$x %*% t(Y_star_PC$rotation)
+    y_hat_PC$data <- t(t(Y_star_PC$x %*% t(Y_star_PC$rotation)) + colMeans(Y_star$data))
     res_hat_star <- Y_star - y_hat_PC
     PCvM_star[i] = PCvM_statistic(pcX$x, res_hat_star$data %*% Y_star_PC$rotation, Ad)
   }
@@ -155,7 +159,7 @@ fregre.pc.ex <- function(B)
   plot(Y)
   plot(Y_star)
   plot(y_hat_PC)
-  plot(fresiduals)
+  plot(Y - y_hat)
   plot(res_star)
   plot(res_hat_star)
   
