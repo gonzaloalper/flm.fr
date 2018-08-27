@@ -10,13 +10,13 @@ fregre.pc.ex <- function(B)
   #sourceDir()
   
   # Argvals
-  lx <- 205
-  ly <- 205
+  lx <- 201
+  ly <- 201
   ss <- seq(0, 1, l = lx) # Argvals of X
   tt <- seq(0, 1, l = ly) # Argvals of Y
   
   # Sample covariate
-  n <- 100
+  n <- 200
   X <- rproc2fdata(n = n, ss, sigma="brownian")
   #X <- r.ou(n = n, x0 = seq(-10, 10, l = n), alpha = 2, t = ss)
   X_range <- X$rangeval[2] - X$rangeval[1]
@@ -43,15 +43,15 @@ fregre.pc.ex <- function(B)
   plot(X)
   plot(Y)
   
-  npcX<-25
-  npcY<-25
+  npcX<-7
+  npcY<-7
   pcX <- fpc(X,npcX,equispaced = TRUE)
   pcY <- fpc(Y,npcY,equispaced = TRUE)
   
-  hat_b <- t(pcX$x[,1:npcX])%*%pcX$x[,1:npcX]
-  hat_b <- pseudoinverse(hat_b)
-  hat_b <- hat_b%*%t(pcX$x[,1:npcX])
-  hat_b <- hat_b%*%pcY$x[,1:npcY]
+  hat_b_aux <- t(pcX$x[,1:npcX])%*%pcX$x[,1:npcX]
+  hat_b_aux <- pseudoinverse(hat_b_aux)
+  hat_b_aux <- hat_b_aux %*% t(pcX$x[,1:npcX])
+  hat_b <- hat_b_aux %*% pcY$x[,1:npcY]
   
   theoretical_beta <- matrix(0, nrow = npcX, ncol = npcY)
   
@@ -92,7 +92,7 @@ fregre.pc.ex <- function(B)
   
   ## RESIDUALS AND BOOTSTRAP
   y_hat <- Y
-  y_hat$data <- t(t(pcY$x %*% t(pcY$rotation)) + colMeans(Y$data))
+  y_hat$data <- t(t((pcX$x%*%hat_b) %*% t(pcY$rotation)) + colMeans(Y$data))
   fresiduals <- Y - y_hat
   par(mfrow = c(1, 3))
   plot(Y)
@@ -120,7 +120,6 @@ fregre.pc.ex <- function(B)
   
   ## WILD BOOTSTRAP RESAMPLING
   
-  P = diag(1, nrow = n, ncol = n) - pcX$x %*% pseudoinverse(t(pcX$x) %*% pcX$x) %*% t(pcX$x)
   PCvM_star <- 0; 
   
   # Adot
@@ -142,7 +141,11 @@ fregre.pc.ex <- function(B)
     }
     Y_star <- Y - fresiduals + res_star
     Y_star_PC <- fpc(Y_star,npcY,equispaced = TRUE)
-    y_hat_PC$data <- t(t(Y_star_PC$x %*% t(Y_star_PC$rotation)) + colMeans(Y_star$data))
+    
+    hat_b_star <- hat_b_aux %*% Y_star_PC$x[,1:npcY]
+    
+    y_hat_PC$data <- t(t((pcX$x%*%hat_b_star) %*% t(Y_star_PC$rotation)) + colMeans(Y_star$data))
+    
     res_hat_star <- Y_star - y_hat_PC
     PCvM_star[i] = PCvM_statistic(pcX$x, res_hat_star$data %*% Y_star_PC$rotation, Ad)
   }
@@ -159,9 +162,9 @@ fregre.pc.ex <- function(B)
   plot(Y)
   plot(Y_star)
   plot(y_hat_PC)
-  plot(Y - y_hat)
+  plot(fresiduals)
   plot(res_star)
   plot(res_hat_star)
   
-  return(pvalue)
+  return(PCvM_star)
 }
