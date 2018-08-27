@@ -8,7 +8,9 @@ data_generation = function(n, ss, tt)
   beta <- function(s, t) {
     #diag(2,lx,ly)
     #(s - s + t - t)
-    cos(2 * pi * t * s) / (1 + (s - 0.5)^2)
+    #pi^2*(s^2-1/(0.25+t)) * tanh(1+s + t^2)
+    1 + sin(2*pi*s) + cos(2*pi*t) + sin(2*pi*s)*cos(2*pi*t)
+    #cos(2 * pi * t * s) / (1 + (s - 0.5)^2)
     #(s + t^2) / 100
     #cos(t * s / pi)^2
   }
