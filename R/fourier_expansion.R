@@ -30,7 +30,7 @@ fourier_expansion = function (X, Y, n_basis_x, n_basis_y)
   
   basis_fourier_x <- t(basis_fourier_x); basis_fourier_y <- t(basis_fourier_y)
   
-  par(mfrow = c(1, 1)); matplot(basis_fourier_x, type="l")
+  #par(mfrow = c(1, 1)); matplot(basis_fourier_x, type="l")
   
   projX <- matrix(0, nrow = n, ncol = n_basis_x)
   projY <- matrix(0, nrow = n, ncol = n_basis_y)
