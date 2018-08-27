@@ -15,6 +15,7 @@ linear_model <- function(X, argvals_y, std_dev, beta)
   Y <- fdata(mdata = noise, argvals = argvals_y, rangeval = range(argvals_y), 
              names = list(main = "Functional response", ylab = "Y"))
   length_x <- diff(X$rangeval)
+  
   for (j in 1:ly) {
     b <- surface_beta[, j]
     Y$data[, j] <- sapply(1:n, function(i) {
