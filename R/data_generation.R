@@ -9,15 +9,15 @@ data_generation = function(n, ss, tt)
     #diag(2,lx,ly)
     #(s - s + t - t)
     #pi^2*(s^2-1/(0.25+t)) * tanh(1+s + t^2)
-    1 + sin(2*pi*s) + cos(2*pi*t) + sin(2*pi*s)*cos(2*pi*t)
-    #cos(2 * pi * t * s) / (1 + (s - 0.5)^2)
+    #1 + sin(2*pi*s) + cos(2*pi*t) + sin(2*pi*s)*cos(2*pi*t)
+    cos(2 * pi * t * s) / (1 + (s - 0.5)^2)
     #(s + t^2) / 100
     #cos(t * s / pi)^2
   }
   
   # Visualization
   surface_beta <- outer(ss, tt, FUN = beta)
-  Y <- linear_model(X, tt, 0.1, beta)
+  Y <- linear_model(X, tt, 0.01, beta)
   
   out <- list(X, Y, beta, surface_beta)
   
