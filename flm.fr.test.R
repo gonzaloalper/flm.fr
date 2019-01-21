@@ -3,6 +3,8 @@ flm.fr.test <- function(X, Y, B_boot = 500, Ad, show_plot = FALSE) {
   
   ## PREPROCESSING
   
+  # TODO: preparar funcion para input basados en objetos fdata
+  
   # Sample size
   n <- nrow(X)
   stopifnot(n == nrow(Y))
@@ -14,7 +16,8 @@ flm.fr.test <- function(X, Y, B_boot = 500, Ad, show_plot = FALSE) {
   ## REAL WORLD
   
   # Estimate B
-  B_hat <- beta_hat_net(X, Y, type = "lasso", lambda = NULL, k_folds = n/2)$beta_hat
+  B_hat <- beta_hat_net(X, Y, type = "lasso", lambda = NULL, 
+                        k_folds = n/2)$beta_hat
   
   # Prediction
   Y_hat <- X %*% B_hat
@@ -40,7 +43,8 @@ flm.fr.test <- function(X, Y, B_boot = 500, Ad, show_plot = FALSE) {
     Y_star <- Y_hat + E_star
     
     # Refit model - compute predictions
-    B_hat_star <- beta_hat_net(X, Y_star, type = "lasso", lambda = NULL, k_folds = n/2)$beta_hat
+    B_hat_star <- beta_hat_net(x = X, y = Y_star, type = "lasso", lambda = NULL, 
+                               k_folds = n/2)$beta_hat
     Y_star_hat <- X %*% B_hat_star
     
     # Residuals of refitted model
@@ -67,6 +71,7 @@ flm.fr.test <- function(X, Y, B_boot = 500, Ad, show_plot = FALSE) {
   }
   
   # Return
+  # TODO: devolver objeto "htest", mirar código fda.usc::flm.test
   return(list("p_value" = p_value, "orig_stat" = orig_stat, 
               "boot_stat" = boot_stat, "B_hat" = B_hat))
   

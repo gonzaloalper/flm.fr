@@ -1,6 +1,6 @@
 beta_hat_net <- function(x, y, type = c("ridge", "lasso")[1], lambda = NULL, 
                          k_folds = nrow(x), ...) {
-  library(glmnet)
+  
   if (is.null(dim(x)) | is.null(dim(x)) | ncol(x) == 1 | ncol(y) == 1) {
     
     stop("x and y must be matrices of two or more columns")
@@ -14,9 +14,10 @@ beta_hat_net <- function(x, y, type = c("ridge", "lasso")[1], lambda = NULL,
     keep <- TRUE
     while (keep) {
       
-      cv <- cv.glmnet(x = x, y = y, family = "mgaussian", alpha = alpha, 
-                      lambda = lambda, nfolds = k_folds, intercept = FALSE, 
-                      standardize = FALSE, standardize.response = FALSE, ...)
+      cv <- glmnet::cv.glmnet(x = x, y = y, family = "mgaussian", alpha = alpha, 
+                              lambda = lambda, nfolds = k_folds, 
+                              intercept = FALSE, standardize = FALSE, 
+                              standardize.response = FALSE, ...)
       
       # Expand grid if optimum is in the 10% lower part of the grid or in the 
       # 90% upper part of the grid
@@ -34,7 +35,8 @@ beta_hat_net <- function(x, y, type = c("ridge", "lasso")[1], lambda = NULL,
                          ", ", sprintf("%.6f", max(cv$lambda)), 
                          "), expanding search grid"))
           lower_lambda <- cv$lambda[which.min(cv$cvm)]/4
-          upper_lambda <- cv$lambda[which.min(cv$cvm)] + cv$lambda[which.min(cv$cvm)]/2
+          upper_lambda <- cv$lambda[which.min(cv$cvm)] + 
+            cv$lambda[which.min(cv$cvm)]/2
           lambda <- seq(lower_lambda, upper_lambda, 
                         length.out = length(cv$lambda))
           lambda[which(lambda<0)] <- 10^lambda[which(lambda<0)]
@@ -58,9 +60,9 @@ beta_hat_net <- function(x, y, type = c("ridge", "lasso")[1], lambda = NULL,
     
   } else {
     
-    fit <- glmnet(x = x, y = y, family = "mgaussian", alpha = alpha, 
-                  lambda = lambda, intercept = FALSE, standardize = TRUE, 
-                  standardize.response = FALSE, ...)
+    fit <- glmnet::glmnet(x = x, y = y, family = "mgaussian", alpha = alpha, 
+                          lambda = lambda, intercept = FALSE, 
+                          standardize = TRUE, standardize.response = FALSE, ...)
     beta_hat <- do.call(cbind, args = as.list(fit$beta))
     
   }
