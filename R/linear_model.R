@@ -2,18 +2,18 @@ linear_model <- function(X, argvals_y, std_dev, beta)
 {
   
   # Sample size
-  n <- length(X)
+  n <- dim(X$data)[1]
   ly <- length(argvals_y)
   
   # Error
-  noise <- matrix(rnorm(n = n * ly, mean = 0, sd = std_dev), nrow = n, ncol = ly)
+  Y <- r.ou(n, t = argvals_y)
   
   # Store surface
   surface_beta <- outer(X$argvals, argvals_y, beta)
   
   # Response: Y(t) = \int X(s) beta(s, t) ds + eps(t)
-  Y <- fdata(mdata = noise, argvals = argvals_y, rangeval = range(argvals_y), 
-             names = list(main = "Functional response", ylab = "Y"))
+  #Y <- fdata(mdata = noise, argvals = argvals_y, rangeval = range(argvals_y), 
+  #           names = list(main = "Functional response", ylab = "Y"))
   length_x <- diff(X$rangeval)
   
   for (j in 1:ly) {
@@ -24,7 +24,8 @@ linear_model <- function(X, argvals_y, std_dev, beta)
   }
   
   # Add noise
-  Y$data <- Y$data + noise 
+  #d <- 0
+  #Y$data <- Y$data + noise + d * exp(X$data)
   return(Y)
   
 }
